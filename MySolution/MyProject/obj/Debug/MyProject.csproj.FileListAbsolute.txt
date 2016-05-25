@@ -1,0 +1,7 @@
+D:\temp\MySolution\MyProject\bin\Debug\robocode.dll
+D:\temp\MySolution\MyProject\bin\Debug\robocode.xml
+D:\temp\MySolution\MyProject\obj\Debug\MyProject.csprojResolveAssemblyReference.cache
+D:\temp\MySolution\MyProject\bin\Debug\FNL.MyRobot_1.0.dll
+D:\temp\MySolution\MyProject\bin\Debug\FNL.MyRobot_1.0.pdb
+D:\temp\MySolution\MyProject\obj\Debug\FNL.MyRobot_1.0.dll
+D:\temp\MySolution\MyProject\obj\Debug\FNL.MyRobot_1.0.pdb
