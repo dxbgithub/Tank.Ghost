@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Robocode;
 
-namespace FNL
+namespace FNL 
 {
     public class MyRobot : Robot
     {
