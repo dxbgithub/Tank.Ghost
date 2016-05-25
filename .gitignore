@@ -1,0 +1,15 @@
+packages/
+.vs/
+_working/
+/**/*.swp
+data/
+/**/[Oo]bj/
+/**/[Bb]in/
+!CDScripts/**/[Bb]in
+CDScripts/Modules/shared*.ps1
+/**/FakesAssemblies/
+/**/*.user
+/**/TestResults/
+/**/logs/
+/**/.sonar/
+
