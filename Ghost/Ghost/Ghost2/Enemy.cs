@@ -19,9 +19,9 @@ namespace Ghost.Ghost2
         private bool _isSentryRobot;
         private string _name;
         private double _velocity;
-        private double _x;
-        private double _y;
-        private long _time;
+        public long Time { get; set; }
+        public double X { get; set; }
+        public double Y { get; set; }
 
 
         public void Update(ScannedRobotEvent e, Ghost2 robot)
@@ -37,9 +37,9 @@ namespace Ghost.Ghost2
             _name = e.Name;
             _velocity = e.Velocity;
             
-            _x = robot.X + Math.Sin(robot.HeadingRadians + _bearingRadians) * Distance;
-            _y = robot.Y + Math.Cos(robot.HeadingRadians + _bearingRadians) * Distance;
-            _time = robot.Time;
+            X = robot.X + Math.Sin(robot.HeadingRadians + _bearingRadians) * Distance;
+            Y = robot.Y + Math.Cos(robot.HeadingRadians + _bearingRadians) * Distance;
+            Time = robot.Time;
         }
 
         public bool None()
@@ -47,19 +47,19 @@ namespace Ghost.Ghost2
             return !_initialized;
         }
 
-        public double ProporateFilePower()
+        public double ProporateFirePower()
         {
             return Math.Min(400/Distance, 3);
         }
 
         public double FutureX(long time)
         {
-            return _x + Math.Sin(_headingRadians)*(_velocity*(time - _time));
+            return X + Math.Sin(_headingRadians) * (_velocity * (time - Time));
         }
 
         public double FutureY(long time)
         {
-            return _y + Math.Cos(_headingRadians) * (_velocity * (time - _time));
+            return Y + Math.Cos(_headingRadians) * (_velocity * (time - Time));
         }
     }
 }
