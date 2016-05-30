@@ -10,14 +10,14 @@ namespace Ghost.Ghost2
 {
     public class Ghost2 : AdvancedRobot
     {
-        private const double Pi = 3.1415926535897931;
+        private const double Pi = Math.PI;
         private const double HalfPi = Pi/2.0;
         private const double TwoPi = 2*Pi;
         private Enemy _enemy;
 
         public override void Run()
         {
-            _enemy = new Enemy();
+            _enemy = new Enemy(this);
             IsAdjustRadarForGunTurn = true;
             IsAdjustGunForRobotTurn = true;
             while (true)
@@ -30,9 +30,9 @@ namespace Ghost.Ghost2
 
         private void AdjustRadar()
         {
-            if (Math.Abs(RadarTurnRemainingRadians) > 0.01) return;
+            //if (Math.Abs(RadarTurnRemainingRadians) > 0.01) return;
 
-            if (Time - _enemy.Time > 10L)
+            if (_enemy.None() || Time - _enemy.Time > 10L)
             {
                 SetTurnRadarRightRadians(TwoPi);
                 return;
@@ -40,25 +40,23 @@ namespace Ghost.Ghost2
             
             var absDeg = AbsoluteBearing(X, Y, _enemy.X, _enemy.Y);
             var relDeg = absDeg - RadarHeadingRadians;
-            var enemyDeg = Math.Sign(relDeg)*TwoPi/100.0;
+            var enemyDeg = Math.Sign(relDeg)* _enemy.OccupiedAngle()*1.5;
             relDeg += enemyDeg;
-            TurnRadarRightRadians(NormalizeBearing(relDeg));
-            //TurnRadarRightRadians(Utils.NormalRelativeAngle(relDeg));
+            SetTurnRadarRightRadians(Utils.NormalRelativeAngle(relDeg));
 
         }
 
         private void AdjustGun()
         {
-            if (!_enemy.None())
-            {
-                var power = _enemy.ProporateFirePower();
-                var when = Time + (long)(_enemy.Distance/ (20.0 - 3.0 * power));
-                var futureX = _enemy.FutureX(when);
-                var futureY = _enemy.FutureY(when);
-                var absDeg = AbsoluteBearing(X, Y, futureX, futureY);
-                SetTurnGunRightRadians(NormalizeBearing(absDeg - GunHeadingRadians));
-                SetFire(power);
-            }
+            if (_enemy.None()) return;
+
+            var power = _enemy.ProporateFirePower();
+            var when = Time + (long)(_enemy.Distance/ (20.0 - 3.0 * power));
+            var futureX = _enemy.FutureX(when);
+            var futureY = _enemy.FutureY(when);
+            var absDeg = AbsoluteBearing(X, Y, futureX, futureY);
+            SetTurnGunRightRadians(Utils.NormalRelativeAngle(absDeg - GunHeadingRadians));
+            //SetFire(power);
         }
 
         public override void OnBulletHit(BulletHitEvent evnt)
@@ -85,21 +83,17 @@ namespace Ghost.Ghost2
         {
 
             //            if (_enemy.None() || evnt.Distance < _enemy.Distance - 70 || !_enemy.IsFired())
-            _enemy.Update(evnt, this);
+            _enemy.Update(evnt);
             
         }
-        private double NormalizeBearing(double angle)
-        {
-            while (angle > 180) angle -= 360;
-            while (angle < -180) angle += 360;
-            return angle;
-        }
+
+
         private double AbsoluteBearing(double x1, double y1, double x2, double y2)
         {
-            double xo = x2 - x1;
-            double yo = y2 - y1;
-            double hyp = Math.Sqrt(xo * xo + yo * yo);
-            double arcSin = Math.Asin(xo / hyp) ;
+            var xo = x2 - x1;
+            var yo = y2 - y1;
+            var hyp = Math.Sqrt(xo * xo + yo * yo);
+            var arcSin = Math.Asin(xo / hyp) ;
             double bearing = 0;
 
             if (xo > 0 && yo > 0)
@@ -108,7 +102,7 @@ namespace Ghost.Ghost2
             }
             else if (xo < 0 && yo > 0)
             { // x neg, y pos: lower-right
-                bearing = TwoPi - arcSin; // arcsin is negative here, actuall TwoPi - ang
+                bearing = TwoPi + arcSin;
             }
             else if (xo > 0 && yo < 0)
             { // x pos, y neg: upper-left
@@ -116,7 +110,7 @@ namespace Ghost.Ghost2
             }
             else if (xo < 0 && yo < 0)
             { // both neg: upper-right
-                bearing = Pi + arcSin; // arcsin is negative here, actually Pi + ang
+                bearing = Pi - arcSin; 
             }
 
             return bearing;
