@@ -33,9 +33,9 @@ namespace Ghost.Ghost3
 
         private bool IsFireOk(Enemy enemy)
         {
-            return Math.Abs(_ghost3.GunHeat) < 0.01;
-//            return (enemy.Distance > 300 && _ghost3.Time - _lastFireTime > 100) ||
-//            (enemy.Distance <= 300 && Math.Abs(_ghost3.GunHeat) < 0.01);
+//            return Math.Abs(_ghost3.GunHeat) < 0.01;
+            return (enemy.Distance > 300 && _ghost3.Time - _lastFireTime > 100) ||
+            (enemy.Distance <= 300 && Math.Abs(_ghost3.GunHeat) < 0.01);
         }
     }
 }
