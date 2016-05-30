@@ -22,10 +22,10 @@ namespace Ghost.Ghost3
                 return;
             }
             
-            var absDeg = Common.AbsoluteBearing(_ghost3.X, _ghost3.Y, enemy.X, enemy.Y);
+            var absDeg = Common.AbsoluteBearingRadians(_ghost3.X, _ghost3.Y, enemy.X, enemy.Y);
             var relDeg = absDeg - _ghost3.RadarHeadingRadians;
-            var enemyDeg = Math.Sign(relDeg)* enemy.OccupiedAngle()*1.5;
-            relDeg += enemyDeg;
+            var enemyDeg = Math.Sign(relDeg)* enemy.OccupiedAngle()*0.5;
+//            relDeg += enemyDeg;
             _ghost3.SetTurnRadarRightRadians(Utils.NormalRelativeAngle(relDeg));
 
         }

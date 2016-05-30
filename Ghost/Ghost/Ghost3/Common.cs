@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Ghost.Ghost3
 {
-    internal class Common
+    public class Common
     {
         internal const double Pi = Math.PI;
         internal const double HalfPi = Pi / 2.0;
         internal const double TwoPi = 2 * Pi;
-        internal static double AbsoluteBearing(double x1, double y1, double x2, double y2)
+        public static double AbsoluteBearingRadians(double x1, double y1, double x2, double y2)
         {
             var xo = x2 - x1;
             var yo = y2 - y1;
@@ -37,6 +37,22 @@ namespace Ghost.Ghost3
             }
 
             return bearing;
+        }
+
+        public static double MakeSureXValid(Ghost3 ghost3, double future, double ratio = 1.0)
+        {
+            var margin = Math.Max(ghost3.Width, ghost3.Height) * ratio;
+            if (future < margin) future = margin;
+            if (future > ghost3.BattleFieldWidth - margin) future = ghost3.BattleFieldWidth - margin;
+            return future;
+        }
+
+        public static double MakeSureYValid(Ghost3 ghost3, double future, double ratio = 1.0)
+        {
+            var margin = Math.Max(ghost3.Width, ghost3.Height) * ratio;
+            if (future < margin) future = margin;
+            if (future > ghost3.BattleFieldHeight - margin) future = ghost3.BattleFieldHeight - margin;
+            return future;
         }
     }
 }

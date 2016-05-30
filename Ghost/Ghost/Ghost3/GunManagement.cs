@@ -1,3 +1,4 @@
+using System;
 using Robocode.Util;
 
 namespace Ghost.Ghost3
@@ -20,7 +21,7 @@ namespace Ghost.Ghost3
             var when = _ghost3.Time + (long)(enemy.Distance/ (20.0 - 3.0 * power));
             var futureX = enemy.FutureX(when);
             var futureY = enemy.FutureY(when);
-            var absDeg = Common.AbsoluteBearing(_ghost3.X, _ghost3.Y, futureX, futureY);
+            var absDeg = Common.AbsoluteBearingRadians(_ghost3.X, _ghost3.Y, futureX, futureY);
             _ghost3.SetTurnGunRightRadians(Utils.NormalRelativeAngle(absDeg - _ghost3.GunHeadingRadians));
 
             if (IsFireOk(enemy))
@@ -32,9 +33,9 @@ namespace Ghost.Ghost3
 
         private bool IsFireOk(Enemy enemy)
         {
-            return (enemy.Distance > 300 && _ghost3.Time - _lastFireTime > 100) ||
-            (enemy.Distance <= 300 && enemy.Distance > 150 && _ghost3.Time - _lastFireTime > 50) ||
-            (enemy.Distance <= 150);
+            return Math.Abs(_ghost3.GunHeat) < 0.01;
+//            return (enemy.Distance > 300 && _ghost3.Time - _lastFireTime > 100) ||
+//            (enemy.Distance <= 300 && Math.Abs(_ghost3.GunHeat) < 0.01);
         }
     }
 }

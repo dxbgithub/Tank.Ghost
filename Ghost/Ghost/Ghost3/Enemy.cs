@@ -64,20 +64,20 @@ namespace Ghost.Ghost3
         public double FutureX(long time)
         {
             var future = X + Math.Sin(_headingRadians) * (_velocity * (time - Time));
-            if (future < _margin) future = _margin;
-            if (future > _ghost3.BattleFieldWidth - _margin) future = _ghost3.BattleFieldWidth - _margin;
+            future = Common.MakeSureXValid(_ghost3, future);
 
             return future;
         }
+
 
         public double FutureY(long time)
         {
             var future = Y + Math.Cos(_headingRadians) * (_velocity * (time - Time));
-            if (future < _margin) future = _margin;
-            if (future > _ghost3.BattleFieldHeight - _margin) future = _ghost3.BattleFieldHeight - _margin;
+            future = Common.MakeSureYValid(_ghost3,future);
 
             return future;
         }
+
 
         public double OccupiedAngle()
         {
