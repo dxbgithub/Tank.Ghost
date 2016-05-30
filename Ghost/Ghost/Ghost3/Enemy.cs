@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Robocode;
 
-namespace Ghost.Ghost2
+namespace Ghost.Ghost3
 {
     public class Enemy
     {
@@ -24,13 +24,13 @@ namespace Ghost.Ghost2
         public double BearingRadians;
         public double Distance;
 
-        private Ghost2 _ghost2;
+        private Ghost3 _ghost3;
         private double _margin;
 
-        public Enemy(Ghost2 ghost2)
+        public Enemy(Ghost3 ghost3)
         {
-            _ghost2 = ghost2;
-            _margin = Math.Max( _ghost2.Width, _ghost2.Height);
+            _ghost3 = ghost3;
+            _margin = Math.Max( _ghost3.Width, _ghost3.Height);
         }
 
         public void Update(ScannedRobotEvent e)
@@ -46,9 +46,9 @@ namespace Ghost.Ghost2
             _name = e.Name;
             _velocity = e.Velocity;
             
-            X = _ghost2.X + Math.Sin(_ghost2.HeadingRadians + BearingRadians) * Distance;
-            Y = _ghost2.Y + Math.Cos(_ghost2.HeadingRadians + BearingRadians) * Distance;
-            Time = _ghost2.Time;
+            X = _ghost3.X + Math.Sin(_ghost3.HeadingRadians + BearingRadians) * Distance;
+            Y = _ghost3.Y + Math.Cos(_ghost3.HeadingRadians + BearingRadians) * Distance;
+            Time = _ghost3.Time;
         }
 
         public bool None()
@@ -65,7 +65,7 @@ namespace Ghost.Ghost2
         {
             var future = X + Math.Sin(_headingRadians) * (_velocity * (time - Time));
             if (future < _margin) future = _margin;
-            if (future > _ghost2.BattleFieldWidth - _margin) future = _ghost2.BattleFieldWidth - _margin;
+            if (future > _ghost3.BattleFieldWidth - _margin) future = _ghost3.BattleFieldWidth - _margin;
 
             return future;
         }
@@ -74,14 +74,14 @@ namespace Ghost.Ghost2
         {
             var future = Y + Math.Cos(_headingRadians) * (_velocity * (time - Time));
             if (future < _margin) future = _margin;
-            if (future > _ghost2.BattleFieldHeight - _margin) future = _ghost2.BattleFieldHeight - _margin;
+            if (future > _ghost3.BattleFieldHeight - _margin) future = _ghost3.BattleFieldHeight - _margin;
 
             return future;
         }
 
         public double OccupiedAngle()
         {
-            var max = Math.Max(_ghost2.Width, _ghost2.Height);
+            var max = Math.Max(_ghost3.Width, _ghost3.Height);
             return max/Distance;
         }
     }

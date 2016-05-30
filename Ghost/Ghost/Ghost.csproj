@@ -46,9 +46,20 @@
   <ItemGroup>
     <Compile Include="Ghost1\FirePrediction.cs" />
     <Compile Include="Ghost1\Ghost1.cs" />
+    <Compile Include="Ghost2\Common.cs" />
     <Compile Include="Ghost2\Enemy.cs" />
     <Compile Include="Ghost2\Ghost2.cs" />
+    <Compile Include="Ghost2\GunManagement.cs" />
+    <Compile Include="Ghost2\MoveManagement.cs" />
     <Compile Include="Ghost2\Position.cs" />
+    <Compile Include="Ghost2\RadarManagement.cs" />
+    <Compile Include="Ghost3\Common.cs" />
+    <Compile Include="Ghost3\Enemy.cs" />
+    <Compile Include="Ghost3\Ghost3.cs" />
+    <Compile Include="Ghost3\GunManagement.cs" />
+    <Compile Include="Ghost3\MoveManagement.cs" />
+    <Compile Include="Ghost3\Position.cs" />
+    <Compile Include="Ghost3\RadarManagement.cs" />
     <Compile Include="GhostA\GhostA.cs" />
     <Compile Include="GhostA\Dancer.cs" />
     <Compile Include="GhostA\Descartes.cs" />
