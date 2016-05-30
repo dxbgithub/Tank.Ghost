@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,17 +15,41 @@ namespace Ghost.Ghost2
         private const double HalfPi = Pi/2.0;
         private const double TwoPi = 2*Pi;
         private Enemy _enemy;
+        private int moveDirection = 1;
+        private long _lastFireTime;
 
         public override void Run()
         {
-            _enemy = new Enemy(this);
-            IsAdjustRadarForGunTurn = true;
-            IsAdjustGunForRobotTurn = true;
+            Init();
             while (true)
             {
                 AdjustRadar();
                 AdjustGun();
+                AdjustMove();
                 Execute();
+            }
+        }
+
+        private void Init()
+        {
+            _enemy = new Enemy(this);
+            IsAdjustRadarForGunTurn = true;
+            IsAdjustGunForRobotTurn = true;
+            _lastFireTime = Time;
+        }
+
+        private void AdjustMove()
+        {
+            if (Math.Abs(Velocity) < 0.01)
+                moveDirection *= -1;
+
+            if (_enemy.None()) return;
+
+            SetTurnRightRadians(Utils.NormalRelativeAngle(_enemy.BearingRadians + HalfPi - 15*moveDirection));
+            if (Time%20 == 0)
+            {
+                moveDirection *= -1;
+                SetAhead(1000*moveDirection);
             }
         }
 
@@ -56,7 +81,19 @@ namespace Ghost.Ghost2
             var futureY = _enemy.FutureY(when);
             var absDeg = AbsoluteBearing(X, Y, futureX, futureY);
             SetTurnGunRightRadians(Utils.NormalRelativeAngle(absDeg - GunHeadingRadians));
-            //SetFire(power);
+            //if (_enemy.Distance < 300 || Time - _lastFireTime > 500)
+            if (IsFireOk())
+            {
+                SetFire(power);
+                _lastFireTime = Time;
+            }
+        }
+
+        private bool IsFireOk()
+        {
+            return (_enemy.Distance > 300 && Time - _lastFireTime > 100) ||
+            (_enemy.Distance <= 300 && _enemy.Distance > 150 && Time - _lastFireTime > 50) ||
+            (_enemy.Distance <= 150);
         }
 
         public override void OnBulletHit(BulletHitEvent evnt)
@@ -81,14 +118,12 @@ namespace Ghost.Ghost2
 
         public override void OnScannedRobot(ScannedRobotEvent evnt)
         {
-
-            //            if (_enemy.None() || evnt.Distance < _enemy.Distance - 70 || !_enemy.IsFired())
             _enemy.Update(evnt);
             
         }
 
 
-        private double AbsoluteBearing(double x1, double y1, double x2, double y2)
+        private static double AbsoluteBearing(double x1, double y1, double x2, double y2)
         {
             var xo = x2 - x1;
             var yo = y2 - y1;
